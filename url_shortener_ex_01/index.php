@@ -4,23 +4,23 @@
 require_once __DIR__ . "/BijectiveFunction.php";
 require_once __DIR__ . "/DBConnector.php";
   
-$dbConnection = DBConnector::get()->connect($serverName,$userName,$password,$dbName);
-$urlModel = new Model($dbConnection);
+$dbConnection  = DBConnector::get()->connect($serverName,$userName,$password,$dbName);
+$urlModel      = new Model($dbConnection);
 $shortenerAlgo = new BJFunction();
-
-// workaround till I understand lastInsertId() always return 0/1;
-$lastInsertID = 0;
+$lastInsertID  = $urlModel->getLastIndex();
+if(empty($lastInsertID)) {
+    $lastInsertID = 0;
+}
 
 // An attempt of a simple router for php
+// Simply route all request that are not files
 $whiteListedFiles = ["index","DBConnector","BijectiveFunction"];
-if(isset($_SERVER["PATH_INFO"])){
+if(isset($_SERVER["PATH_INFO"])) {
     $path = trim($_SERVER["PATH_INFO"]);
     $path = substr($path,1);
-    if(!in_array($path,$whiteListedFiles)) 
-    {
+    if(!in_array($path,$whiteListedFiles)) {
         $decodedUrl = $shortenerAlgo->decode($path);
         $data = $urlModel->getUrl($decodedUrl);
-        var_dump($data);
         header("Location: ". $data->long_url,true,301);
         exit();
     }
@@ -28,8 +28,8 @@ if(isset($_SERVER["PATH_INFO"])){
 
 if (!empty($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "POST") {
     if (!empty($_POST["long_url"])) { 
-        $lastIndex = $lastInsertID + 1;
-        $shortUrl = $shortenerAlgo->encode($lastIndex);
+        $lastInsertID = $lastInsertID + 1;
+        $shortUrl = $shortenerAlgo->encode($lastInsertID);
         $urlModel->addUrl($_POST["long_url"],$shortUrl);
         echo "new url is $shortUrl";
     }
