@@ -18,6 +18,12 @@ class BJFunction {
         $this->keys = str_split($keys);
     }
 
+    /*
+    *  Encode number from base10 base(lengthOfKeys) default:64
+    *
+    *  @param  int number
+    @  @return string 
+    */  
     public function encode(int $id) : string {
         $keysLength = count($this->keys);
         $encodedData = [];
@@ -30,6 +36,12 @@ class BJFunction {
         return strrev(implode("",$encodedData));
     }
 
+    /*
+    *  Decode encoded string to base base10 
+    *
+    *  @param  string 
+    @  @return int  
+    */
     public function decode(string $encodedData) : int {
         $decodedData = [];
         $encodedData = str_split($encodedData);
@@ -40,6 +52,6 @@ class BJFunction {
             $decodedValue = ($num * (62 ** (($encodedDataLength - 1) - $i)));
             array_push($decodedData,$decodedValue);
         }
-        return array_sum($decodedData); // decodedId
+        return array_sum($decodedData);
     }
 }
