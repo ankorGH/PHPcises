@@ -35,6 +35,13 @@ class Model {
         $this->connection = $connection;
     }
     
+    /*
+    *  Add url (long form and short form)
+    *
+    *  @param string $longUrl
+    *  @param string $shortUrl
+    *  @return mixed
+    */
     public function addUrl(string $longUrl, string $shortUrl) 
     {
         $stmt = $this->connection->prepare("INSERT INTO urls (long_url,short_url) VALUES (:longUrl,:shortUrl)");
@@ -43,6 +50,12 @@ class Model {
         $stmt->execute();
     }
     
+    /*
+    *  Get url (long form)
+    *
+    *  @param int $id
+    *  @return mixed
+    */
     public function getUrl(int $id) 
     {
         $stmt = $this->connection->prepare("SELECT * FROM urls WHERE id=:id");
@@ -51,12 +64,16 @@ class Model {
         return $stmt->fetchObject();
     }
 
-    public function getLastIndex()
+    /*
+    *  Get last index of table
+    *
+    *  @return int
+    */
+    public function getLastIndex() : int
     {
-        $stmt = $this->connection->prepare("SELECT LAST_INSERT_ID();");
+        $stmt = $this->connection->prepare("SELECT MAX(id) FROM urls;");
         $stmt->execute();
-        $lastIndex =  $stmt->fetchObject();
-        $index = "LAST_INSERT_ID()";
-        return $lastIndex->$index;
+        $maxId = "MAX(id)";
+        return (int) $stmt->fetchObject()->$maxId;
     }
 }
