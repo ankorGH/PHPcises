@@ -11,12 +11,12 @@ $dotenv->load();
 /**
  * Configure cloudinary
  */
-\Cloudinary::config(array( 
+\Cloudinary::config([
     "cloud_name" => getenv("CLOUDINARY_CLOUD_NAME"), 
-    "api_key" => getenv("CLOUDINARY_API_SECRET"), 
+    "api_key" => getenv("CLOUDINARY_API_KEY"), 
     "api_secret" => getenv("CLOUDINARY_API_SECRET"), 
     "secure" => true
-  ));
+]);
   
 
 /**
