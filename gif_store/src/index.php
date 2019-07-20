@@ -14,9 +14,8 @@
             if($mediaForm["error"] === 0) {
                 if(isImage(($mediaForm["name"]))) {
                     if(filesize($mediaForm["tmp_name"]) < MAX_FILE_SIZE) {
-                        $fileToBeUploaded = $uploads . "/" . $mediaName . "." . pathinfo($mediaForm["name"],PATHINFO_EXTENSION);
-
-                        if(move_uploaded_file($mediaForm["tmp_name"],$fileToBeUploaded)){
+                        if($uploadedMedia = \Cloudinary\Uploader::upload($mediaForm["tmp_name"])){
+                            $uploadedMediaUrl = $uploadedMedia["secure_url"];
                             $message = "Successfuly uploaded file";
                         } else {
                             $message = "couldnt";

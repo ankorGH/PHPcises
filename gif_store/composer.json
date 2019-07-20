@@ -1,5 +1,6 @@
 {
     "require": {
-        "cloudinary/cloudinary_php": "^1.14"
+        "cloudinary/cloudinary_php": "^1.14",
+        "vlucas/phpdotenv": "^3.4"
     }
 }
