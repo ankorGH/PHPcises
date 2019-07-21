@@ -1,20 +1,16 @@
 <?php
 
-require_once __DIR__ . "/../vendor/autoload.php";
+require_once __DIR__ . "/Config.php";
 
 const MAX_FILE_SIZE = 1000000000;
-const ENV_PATH = __DIR__ . "/../";
-
-$dotenv =  \Dotenv\Dotenv::create(ENV_PATH);
-$dotenv->load();
 
 /**
  * Configure cloudinary
  */
 \Cloudinary::config([
-    "cloud_name" => getenv("CLOUDINARY_CLOUD_NAME"), 
-    "api_key" => getenv("CLOUDINARY_API_KEY"), 
-    "api_secret" => getenv("CLOUDINARY_API_SECRET"), 
+    "cloud_name" => $Config["CLOUDINARY_CLOUD_NAME"], 
+    "api_key"    => $Config["CLOUDINARY_API_KEY"], 
+    "api_secret" => $Config["CLOUDINARY_API_SECRET"], 
     "secure" => true
 ]);
   
