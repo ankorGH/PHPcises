@@ -1,7 +1,11 @@
 <?php
-    
-    require_once __DIR__ . "/helpers.php";
 
+    require_once __DIR__ . "/helpers.php";
+    require_once __DIR__ . "/Database.php";
+
+    use \Cloudinary\Uploader as MediaUploader;
+    
+    $mediaModel = new MediaModel();
     $message = "";
 
     if(!empty($_POST["submit"])) {
@@ -14,11 +18,12 @@
             if($mediaForm["error"] === 0) {
                 if(isImage(($mediaForm["name"]))) {
                     if(filesize($mediaForm["tmp_name"]) < MAX_FILE_SIZE) {
-                        if($uploadedMedia = \Cloudinary\Uploader::upload($mediaForm["tmp_name"])){
+                        if($uploadedMedia = MediaUploader::upload($mediaForm["tmp_name"])){
                             $uploadedMediaUrl = $uploadedMedia["secure_url"];
+                            MediaModel::addMedia($uploadedMediaUrl,$mediaName);
                             $message = "Successfuly uploaded file";
                         } else {
-                            $message = "couldnt";
+                            $message = "Failure in uploading file";
                         }
                     } else {
                         $message = "Image is too large";
@@ -59,6 +64,12 @@
     <br />
     <div>
         <h2>Show all images here</h2>
+        <?php 
+            $media = MediaModel::all();
+            foreach($media as $image) {
+                echo "<img src='" . $image["url"] ."' height='300' width='300' />";
+            }
+        ?>
     </div>
 </body>
 </html>
